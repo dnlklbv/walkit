@@ -10,6 +10,8 @@ module.exports = {
           '@data': './src/data',
           '@views': './src/views',
           '@utils': './src/utils',
+          '@store': './src/store',
+          '@realm': './src/realm',
         },
       },
     ],

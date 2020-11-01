@@ -1,9 +1,10 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import geolocation from '@react-native-community/geolocation';
+import {connect} from 'react-redux';
 import {Polyline} from 'react-native-maps';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 
-import {WATCH_POSITION_CONFIG} from '@constants/geolocation';
-import {useAppStore} from '@data/';
+import {GEOLOCATION_CONFIG} from '@constants/geolocation';
+import * as tracksActions from '@store/actions/tracksActions';
 
 import {
   Map,
@@ -14,43 +15,69 @@ import {
   RedButton,
   ButtonRow,
   ButtonLabel,
-  ControlsContainer,
 } from './styles';
 
-const MapView = ({navigation, route}) => {
+const MapView = ({
+  navigation,
+  route,
+  createCurrentTrack,
+  addWaypoint,
+  currentTrack,
+  saveCurrentTrack,
+}) => {
   const track = route?.params?.track;
-  const [store] = useAppStore();
-  const [watchID, setWatchID] = useState(null);
+  const [followUser, setFollowUser] = useState(true);
 
   const trackExists = !!track;
-  const isTracking = watchID !== null;
+  const isTracking = !!currentTrack;
 
-  const setWaypoints = ({coords}) => {
-    console.log('coords: ', coords);
-  };
-
-  const startTracking = () => {
-    const newWatchID = geolocation.watchPosition(
-      setWaypoints,
-      (error) => console.log(error),
-      WATCH_POSITION_CONFIG,
-    );
-
-    setWatchID(newWatchID);
-  };
-
-  const stopTracking = () => {
-    setWatchID(null);
-  };
+  const setWaypoints = useCallback(({coords}) => addWaypoint(coords), [
+    addWaypoint,
+  ]);
 
   useEffect(() => {
-    return () => geolocation.clearWatch(watchID);
-  }, [watchID]);
+    if (isTracking) {
+      BackgroundGeolocation.onLocation(setWaypoints, (e) => console.log(e));
+    } else {
+      BackgroundGeolocation.removeListeners();
+    }
+  }, [isTracking, setWaypoints]);
+
+  useEffect(() => {
+    BackgroundGeolocation.ready(GEOLOCATION_CONFIG, (state) => {
+      console.log('- BackgroundGeolocation is configured : ', state.enabled);
+
+      if (!state.enabled) {
+        BackgroundGeolocation.start(function () {
+          console.log('- Start success');
+        });
+      }
+    });
+  }, []);
+
+  const startTracking = () => createCurrentTrack();
+
+  const stopTracking = () => {
+    BackgroundGeolocation.removeListeners();
+    saveCurrentTrack();
+  };
 
   return (
     <>
-      <Map showsUserLocation>
-        {/* <Polyline coordinates={waypoints} strokeColor="#FF3767" strokeWidth={5} /> */}
+      <Map
+        showsUserLocation
+        showsMyLocationButton
+        followsUserLocation={followUser}
+        onMapReady={() => {
+          setTimeout(() => setFollowUser(false), 1000);
+        }}>
+        {currentTrack && (
+          <Polyline
+            coordinates={currentTrack.waypoints}
+            strokeColor="#FF3767"
+            strokeWidth={5}
+          />
+        )}
       </Map>
       <Header>
         <ViewTitle>Walkit</ViewTitle>
@@ -79,4 +106,14 @@ const MapView = ({navigation, route}) => {
   );
 };
 
-export default MapView;
+const mapStateToProps = ({tracks: {currentTrack}}) => ({
+  currentTrack,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  createCurrentTrack: () => dispatch(tracksActions.createCurrentTrack()),
+  addWaypoint: (wp) => dispatch(tracksActions.addWaypoint(wp)),
+  saveCurrentTrack: () => dispatch(tracksActions.saveCurrentTrack()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapView);

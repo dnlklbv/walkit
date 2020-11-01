@@ -23,16 +23,16 @@ const tabs = [
     component: Tracks,
     title: 'Треки',
   },
-  {
-    key: 'journal',
-    component: Statistics,
-    title: 'Статистика',
-  },
-  {
-    key: 'activity',
-    component: Bookmarks,
-    title: 'Закладки',
-  },
+  // {
+  //   key: 'journal',
+  //   component: Statistics,
+  //   title: 'Статистика',
+  // },
+  // {
+  //   key: 'activity',
+  //   component: Bookmarks,
+  //   title: 'Закладки',
+  // },
 ];
 
 const DEFAULT_SCREEN = 0;
@@ -139,13 +139,13 @@ export default class Pager extends PureComponent {
         </PagerView>
         <HeaderWrapper style={this.headerPosition}>
           <Title>Walkit</Title>
-          <Header>
+          {/* <Header>
             <ButtonsContainer style={this.headerIconsScale}>
               {tabs.map((tab, i) =>
                 this.renderHeaderTab(i, tab.key, tab.title),
               )}
             </ButtonsContainer>
-          </Header>
+          </Header> */}
         </HeaderWrapper>
       </AppBase>
     );

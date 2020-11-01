@@ -1,4 +1,8 @@
 export const getRegionByWaypoints = (waypoints) => {
+  if (!waypoints.length) {
+    return null;
+  }
+
   const waypointsCount = waypoints.length;
   const centralWaypoint = waypoints[Math.round(waypointsCount / 2)];
   const latitudeDelta = Math.abs(

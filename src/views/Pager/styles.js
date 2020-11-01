@@ -8,13 +8,14 @@ export const AppBase = styled.View``;
 
 export const HeaderWrapper = styled(Animated.View)`
   padding-top: ${getStatusBarHeight()}px;
+  width: 100%;
   position: absolute;
   top: 0;
   background: #fff;
 `;
 
 export const Header = styled.View`
-  padding: 0 10px;
+  padding: 0 10px 10px;
   background: #fff;
 `;
 
@@ -45,7 +46,8 @@ export const PagerView = styled(Animated.ScrollView)`
 
 export const FullPageView = styled(Animated.ScrollView).attrs({
   contentContainerStyle: {
-    paddingTop: getStatusBarHeight() + 95,
+    paddingTop: getStatusBarHeight() + 70,
+    // paddingTop: getStatusBarHeight() + 95,
   },
 })`
   width: ${SCREEN_WIDTH}px;

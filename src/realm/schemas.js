@@ -19,5 +19,6 @@ export const UserSchema = {
   name: 'User',
   properties: {
     tracks: {type: 'Track[]', default: []},
+    currentTrack: {type: 'Track?', default: []},
   },
 };

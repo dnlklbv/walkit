@@ -1,22 +1,18 @@
-import React, {useEffect} from 'react';
+import React from 'react';
+import {connect} from 'react-redux';
 
 import {PAGE_NAMES} from '@constants/navigation';
-import {useAppStore} from '@data/';
 
 import {Page} from '../styles';
 import {Text} from '@components/Text';
 import {LargeButton} from '@components/Button';
 import TrackCard from '@components/TrackCard';
 
-const Tracks = ({navigation}) => {
-  const [state] = useAppStore();
-
-  const {tracks = []} = state;
-
+const Tracks = ({navigation, tracks, currentTrack}) => {
   return (
     <Page>
       <LargeButton onPress={() => navigation.navigate(PAGE_NAMES.MAP)}>
-        <Text>Записать новый</Text>
+        <Text>{currentTrack ? 'Продолжить запись' : 'Записать новый'}</Text>
       </LargeButton>
       {tracks.map((track, i) => (
         <TrackCard track={track} key={i} navigation={navigation} />
@@ -25,4 +21,9 @@ const Tracks = ({navigation}) => {
   );
 };
 
-export default Tracks;
+const mapStateToProps = ({tracks: {tracks, currentTrack}}) => ({
+  tracks,
+  currentTrack,
+});
+
+export default connect(mapStateToProps)(Tracks);

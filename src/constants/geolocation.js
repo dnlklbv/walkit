@@ -1,9 +1,7 @@
-export const GEOLOCATION_CONFIG = {
-  authorizationLevel: 'always',
-};
+import BackgroundGeolocation from 'react-native-background-geolocation';
 
-export const WATCH_POSITION_CONFIG = {
-  enableHighAccuracy: true,
-  timeout: 2000,
-  maximumAge: 2000,
+export const GEOLOCATION_CONFIG = {
+  desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
+  distanceFilter: 5,
+  stopOnTerminate: false, // Allow the background-service to continue tracking when user closes the app.
 };
