@@ -1,21 +1,12 @@
-export const getRegionByWaypoints = (waypoints) => {
-  if (!waypoints.length) {
-    return null;
-  }
+import {Navigation} from 'react-native-navigation';
 
-  const waypointsCount = waypoints.length;
-  const centralWaypoint = waypoints[Math.round(waypointsCount / 2)];
-  const latitudeDelta = Math.abs(
-    (waypoints[0].latitude - waypoints[waypointsCount - 1].latitude) * 2,
-  );
-  const longitudeDelta = Math.abs(
-    (waypoints[0].longitude - waypoints[waypointsCount - 1].longitude) * 2,
-  );
+import {PAGE_NAMES} from '@constants/navigation';
 
-  return {
-    latitude: centralWaypoint.latitude,
-    longitude: centralWaypoint.longitude,
-    latitudeDelta,
-    longitudeDelta,
-  };
-};
+export const goBack = (id) => Navigation.pop(id);
+
+export const navigateToMap = (id) =>
+  Navigation.push(id, {
+    component: {
+      name: PAGE_NAMES.MAP,
+    },
+  });

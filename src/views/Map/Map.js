@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {Polyline} from 'react-native-maps';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
+import {goBack} from '@utils/navigation';
 import {GEOLOCATION_CONFIG} from '@constants/geolocation';
 import * as tracksActions from '@store/actions/tracksActions';
 
@@ -18,15 +19,19 @@ import {
 } from './styles';
 
 const MapView = ({
-  navigation,
+  componentId,
   route,
   createCurrentTrack,
   addWaypoint,
   currentTrack,
   saveCurrentTrack,
+  addNote,
 }) => {
   const track = route?.params?.track;
   const [followUser, setFollowUser] = useState(true);
+  const [showNoteForm, setShowNoteForm] = useState(false);
+
+  const back = () => goBack(componentId);
 
   const trackExists = !!track;
   const isTracking = !!currentTrack;
@@ -62,6 +67,10 @@ const MapView = ({
     saveCurrentTrack();
   };
 
+  const newNote = () => {
+    // setShowNoteForm(true);
+  };
+
   return (
     <>
       <Map
@@ -81,17 +90,14 @@ const MapView = ({
       </Map>
       <Header>
         <ViewTitle>Walkit</ViewTitle>
-        <CloseButton
-          onPress={() => {
-            navigation.navigate('Pager');
-          }}>
+        <CloseButton onPress={back}>
           <ViewTitle>X</ViewTitle>
         </CloseButton>
       </Header>
       {!trackExists && (
         <ButtonRow>
           {isTracking && (
-            <BlueButton>
+            <BlueButton onPress={newNote}>
               <ButtonLabel>Новая заметка</ButtonLabel>
             </BlueButton>
           )}
@@ -113,6 +119,7 @@ const mapStateToProps = ({tracks: {currentTrack}}) => ({
 const mapDispatchToProps = (dispatch) => ({
   createCurrentTrack: () => dispatch(tracksActions.createCurrentTrack()),
   addWaypoint: (wp) => dispatch(tracksActions.addWaypoint(wp)),
+  addNote: (note) => dispatch(tracksActions.addNote(note)),
   saveCurrentTrack: () => dispatch(tracksActions.saveCurrentTrack()),
 });
 

@@ -41,8 +41,6 @@ export default class Pager extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.navigation = props.navigation;
-
     this.state = {
       activeTab: DEFAULT_SCREEN,
     };
@@ -114,7 +112,7 @@ export default class Pager extends PureComponent {
   renderTabContent = (Component, key, i) => {
     return (
       <FullPageView key={key}>
-        <Component navigation={this.navigation} />
+        <Component componentId={this.props.componentId} />
       </FullPageView>
     );
   };

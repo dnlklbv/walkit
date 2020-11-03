@@ -1,21 +1,22 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {PAGE_NAMES} from '@constants/navigation';
-
-import {Page} from '../styles';
+import {navigateToMap} from '@utils/navigation';
 import {Text} from '@components/Text';
 import {LargeButton} from '@components/Button';
 import TrackCard from '@components/TrackCard';
 
-const Tracks = ({navigation, tracks, currentTrack}) => {
+import {Page} from '../styles';
+
+const Tracks = ({componentId, tracks, currentTrack}) => {
+  const navToMap = () => navigateToMap(componentId);
   return (
     <Page>
-      <LargeButton onPress={() => navigation.navigate(PAGE_NAMES.MAP)}>
+      <LargeButton onPress={navToMap}>
         <Text>{currentTrack ? 'Продолжить запись' : 'Записать новый'}</Text>
       </LargeButton>
       {tracks.map((track, i) => (
-        <TrackCard track={track} key={i} navigation={navigation} />
+        <TrackCard track={track} key={i} />
       ))}
     </Page>
   );

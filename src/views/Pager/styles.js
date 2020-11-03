@@ -46,7 +46,7 @@ export const PagerView = styled(Animated.ScrollView)`
 
 export const FullPageView = styled(Animated.ScrollView).attrs({
   contentContainerStyle: {
-    paddingTop: getStatusBarHeight() + 70,
+    paddingTop: getStatusBarHeight(),
     // paddingTop: getStatusBarHeight() + 95,
   },
 })`

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Polyline} from 'react-native-maps';
 
-import {getRegionByWaypoints} from '@utils/navigation';
+import {getRegionByWaypoints} from '@utils/map';
 
 import {PAGE_NAMES} from '@constants/navigation';
 
