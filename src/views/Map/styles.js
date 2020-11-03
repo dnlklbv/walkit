@@ -32,12 +32,13 @@ export const ButtonRow = styled.View`
   width: 100%;
   flex-direction: row;
   justify-content: center;
-  margin-bottom: 50px;
+  padding: 10px 0 40px;
+  background-color: #fff;
 `;
 
 export const BlueButton = styled.TouchableOpacity`
   padding: 6px 20px;
-  margin: 5px;
+  margin: 0 5px;
   height: 32px;
   background: #3793ff;
   box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.1);

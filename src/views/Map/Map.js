@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Polyline} from 'react-native-maps';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
-import {goBack} from '@utils/navigation';
+import {goBack, showEditNoteModal} from '@utils/navigation';
 import {GEOLOCATION_CONFIG} from '@constants/geolocation';
 import * as tracksActions from '@store/actions/tracksActions';
 
@@ -68,6 +68,7 @@ const MapView = ({
   };
 
   const newNote = () => {
+    showEditNoteModal();
     // setShowNoteForm(true);
   };
 

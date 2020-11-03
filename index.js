@@ -9,6 +9,7 @@ import {withStoreProvider, store} from '@store';
 import {initData} from '@store/actions/coreActions';
 import Pager from '@views/Pager';
 import Map from '@views/Map';
+import EditNoteModal from '@views/EditNoteModal';
 
 const components = [
   {
@@ -18,6 +19,10 @@ const components = [
   {
     name: PAGE_NAMES.MAP,
     component: Map,
+  },
+  {
+    name: PAGE_NAMES.EDIT_NOTE_MODAL,
+    component: EditNoteModal,
   },
 ];
 

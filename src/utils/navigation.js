@@ -10,3 +10,16 @@ export const navigateToMap = (id) =>
       name: PAGE_NAMES.MAP,
     },
   });
+
+export const showEditNoteModal = () =>
+  Navigation.showModal({
+    stack: {
+      children: [
+        {
+          component: {
+            name: PAGE_NAMES.EDIT_NOTE_MODAL,
+          },
+        },
+      ],
+    },
+  });
