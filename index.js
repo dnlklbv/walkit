@@ -9,7 +9,7 @@ import {withStoreProvider, store} from '@store';
 import {initData} from '@store/actions/coreActions';
 import Pager from '@views/Pager';
 import Map from '@views/Map';
-import EditNoteModal from '@views/EditNoteModal';
+import NoteModal from '@views/NoteModal';
 
 const components = [
   {
@@ -21,8 +21,8 @@ const components = [
     component: Map,
   },
   {
-    name: PAGE_NAMES.EDIT_NOTE_MODAL,
-    component: EditNoteModal,
+    name: PAGE_NAMES.NOTE_MODAL,
+    component: NoteModal,
   },
 ];
 

@@ -4,7 +4,7 @@ import {INIT_DATA, setRealm} from '@store/actions/coreActions';
 import {setTracks, setCurrentTrack} from '@store/actions/tracksActions';
 
 import Realm from 'realm';
-import {UserSchema, TrackSchema, CoordinatesSchema} from '@realm/schemas';
+import schemas from '@realm/schemas';
 
 function* initData() {
   let stateRealm = null;
@@ -12,7 +12,7 @@ function* initData() {
   let currentTrack = null;
 
   yield Realm.open({
-    schema: [UserSchema, TrackSchema, CoordinatesSchema],
+    schema: schemas,
     schemaVersion: 0,
   })
     .then((realm) => {
@@ -31,14 +31,16 @@ function* initData() {
           });
         });
       } else {
-        tracks = user.tracks.map(({waypoints}) => ({
+        tracks = user.tracks.map(({waypoints, notes}) => ({
           waypoints: [...waypoints],
+          notes: [...notes],
         }));
 
         currentTrack = !user.currentTrack
           ? null
           : {
               waypoints: [...user.currentTrack.waypoints],
+              notes: [...user.currentTrack.notes],
             };
       }
     })

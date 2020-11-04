@@ -3,6 +3,7 @@ import {
   CREATE_CURRENT_TRACK,
   ADD_WAYPOINT,
   SAVE_CURRENT_TRACK,
+  ADD_NOTE,
 } from '@store/actions/tracksActions';
 
 const getRealm = ({core: {realm}}) => realm;
@@ -42,6 +43,25 @@ export function* watchAddWaypoint() {
   yield takeLatest(ADD_WAYPOINT, addWaypoint);
 }
 
+function* addNote({payload}) {
+  try {
+    const db = yield select(getRealm);
+
+    console.log('SAVE: ', payload);
+
+    db.write(() => {
+      const user = db.objects('User')[0];
+      user.currentTrack.notes.push(db.create('Note', payload));
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export function* watchAddNote() {
+  yield takeLatest(ADD_NOTE, addNote);
+}
+
 function* saveCurrentTrack() {
   try {
     const db = yield select(getRealm);
@@ -60,4 +80,9 @@ export function* watchSaveCurrentTrack() {
   yield takeLatest(SAVE_CURRENT_TRACK, saveCurrentTrack);
 }
 
-export default [watchAddCurrentTrack, watchAddWaypoint, watchSaveCurrentTrack];
+export default [
+  watchAddCurrentTrack,
+  watchAddWaypoint,
+  watchAddNote,
+  watchSaveCurrentTrack,
+];

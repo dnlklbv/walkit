@@ -1,9 +1,9 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {connect} from 'react-redux';
-import {Polyline} from 'react-native-maps';
+import {Polyline, Marker} from 'react-native-maps';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
-import {goBack, showEditNoteModal} from '@utils/navigation';
+import {goBack, showNoteModal} from '@utils/navigation';
 import {GEOLOCATION_CONFIG} from '@constants/geolocation';
 import * as tracksActions from '@store/actions/tracksActions';
 
@@ -29,7 +29,6 @@ const MapView = ({
 }) => {
   const track = route?.params?.track;
   const [followUser, setFollowUser] = useState(true);
-  const [showNoteForm, setShowNoteForm] = useState(false);
 
   const back = () => goBack(componentId);
 
@@ -68,8 +67,10 @@ const MapView = ({
   };
 
   const newNote = () => {
-    showEditNoteModal();
-    // setShowNoteForm(true);
+    showNoteModal({
+      coordinates: currentTrack.waypoints[currentTrack.waypoints.length - 1],
+      isNew: true,
+    });
   };
 
   return (
@@ -82,11 +83,20 @@ const MapView = ({
           setTimeout(() => setFollowUser(false), 1000);
         }}>
         {currentTrack && (
-          <Polyline
-            coordinates={currentTrack.waypoints}
-            strokeColor="#FF3767"
-            strokeWidth={5}
-          />
+          <>
+            <Polyline
+              coordinates={currentTrack.waypoints}
+              strokeColor="#FF3767"
+              strokeWidth={5}
+            />
+            {currentTrack.notes.map((note, idx) => (
+              <Marker
+                key={idx}
+                coordinate={note.coordinates}
+                onPress={() => showNoteModal(note)}
+              />
+            ))}
+          </>
         )}
       </Map>
       <Header>

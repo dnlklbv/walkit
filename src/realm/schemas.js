@@ -8,10 +8,19 @@ export const CoordinatesSchema = {
   },
 };
 
+export const NoteSchema = {
+  name: 'Note',
+  properties: {
+    coordinates: 'Coordinates',
+    text: 'string',
+  },
+};
+
 export const TrackSchema = {
   name: 'Track',
   properties: {
     waypoints: 'Coordinates[]',
+    notes: 'Note[]',
   },
 };
 
@@ -22,3 +31,7 @@ export const UserSchema = {
     currentTrack: {type: 'Track?', default: []},
   },
 };
+
+const schemas = [UserSchema, TrackSchema, CoordinatesSchema, NoteSchema];
+
+export default schemas;

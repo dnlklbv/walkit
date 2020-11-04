@@ -1,5 +1,5 @@
 import React from 'react';
-import {Polyline} from 'react-native-maps';
+import {Polyline, Marker} from 'react-native-maps';
 
 import {getRegionByWaypoints} from '@utils/map';
 
@@ -10,7 +10,7 @@ import {Card, Map, Title, Meta} from './styles';
 import {Text} from '@components/Text';
 
 const TrackCard = ({track, navigation}) => {
-  const {waypoints} = track;
+  const {waypoints, notes} = track;
 
   // const dateLabel = new Date(date).toLocaleString();
 
@@ -28,6 +28,9 @@ const TrackCard = ({track, navigation}) => {
           strokeColor="#FF3767"
           strokeWidth={5}
         />
+        {notes.map((note, idx) => (
+          <Marker key={idx} coordinate={note.coordinates} />
+        ))}
       </Map>
       <Meta>
         {/* <Text>{dateLabel}</Text>

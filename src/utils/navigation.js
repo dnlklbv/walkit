@@ -4,6 +4,8 @@ import {PAGE_NAMES} from '@constants/navigation';
 
 export const goBack = (id) => Navigation.pop(id);
 
+export const dismissAllModals = () => Navigation.dismissAllModals();
+
 export const navigateToMap = (id) =>
   Navigation.push(id, {
     component: {
@@ -11,13 +13,14 @@ export const navigateToMap = (id) =>
     },
   });
 
-export const showEditNoteModal = () =>
+export const showNoteModal = (props = {}) =>
   Navigation.showModal({
     stack: {
       children: [
         {
           component: {
-            name: PAGE_NAMES.EDIT_NOTE_MODAL,
+            name: PAGE_NAMES.NOTE_MODAL,
+            passProps: props,
           },
         },
       ],
