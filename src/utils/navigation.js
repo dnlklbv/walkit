@@ -6,10 +6,11 @@ export const goBack = (id) => Navigation.pop(id);
 
 export const dismissAllModals = () => Navigation.dismissAllModals();
 
-export const navigateToMap = (id) =>
+export const navigateToMap = (id, props = {}) =>
   Navigation.push(id, {
     component: {
       name: PAGE_NAMES.MAP,
+      passProps: props,
     },
   });
 

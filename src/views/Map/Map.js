@@ -1,9 +1,11 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {connect} from 'react-redux';
-import {Polyline, Marker} from 'react-native-maps';
+import {Polyline} from 'react-native-maps';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
+import NoteMarker from '@components/NoteMarker';
 import {goBack, showNoteModal} from '@utils/navigation';
+import {getRegionByWaypoints} from '@utils/map';
 import {GEOLOCATION_CONFIG} from '@constants/geolocation';
 import * as tracksActions from '@store/actions/tracksActions';
 
@@ -20,20 +22,24 @@ import {
 
 const MapView = ({
   componentId,
-  route,
+  track,
   createCurrentTrack,
   addWaypoint,
   currentTrack,
   saveCurrentTrack,
-  addNote,
 }) => {
-  const track = route?.params?.track;
   const [followUser, setFollowUser] = useState(true);
 
   const back = () => goBack(componentId);
 
   const trackExists = !!track;
   const isTracking = !!currentTrack;
+
+  const notes = trackExists ? track.notes : isTracking && currentTrack.notes;
+  const waypoints = trackExists
+    ? track.waypoints
+    : isTracking && currentTrack.waypoints;
+  const region = trackExists ? getRegionByWaypoints(waypoints) : null;
 
   const setWaypoints = useCallback(({coords}) => addWaypoint(coords), [
     addWaypoint,
@@ -77,27 +83,19 @@ const MapView = ({
     <>
       <Map
         showsUserLocation
-        showsMyLocationButton
-        followsUserLocation={followUser}
+        initialRegion={region}
+        followsUserLocation={!trackExists && followUser}
         onMapReady={() => {
           setTimeout(() => setFollowUser(false), 1000);
         }}>
-        {currentTrack && (
-          <>
-            <Polyline
-              coordinates={currentTrack.waypoints}
-              strokeColor="#FF3767"
-              strokeWidth={5}
-            />
-            {currentTrack.notes.map((note, idx) => (
-              <Marker
-                key={idx}
-                coordinate={note.coordinates}
-                onPress={() => showNoteModal(note)}
-              />
-            ))}
-          </>
+        {waypoints && (
+          <Polyline
+            coordinates={waypoints}
+            strokeColor="#FF3767"
+            strokeWidth={5}
+          />
         )}
+        {notes && notes.map((note, idx) => <NoteMarker key={idx} note={note} />)}
       </Map>
       <Header>
         <ViewTitle>Walkit</ViewTitle>
@@ -130,7 +128,6 @@ const mapStateToProps = ({tracks: {currentTrack}}) => ({
 const mapDispatchToProps = (dispatch) => ({
   createCurrentTrack: () => dispatch(tracksActions.createCurrentTrack()),
   addWaypoint: (wp) => dispatch(tracksActions.addWaypoint(wp)),
-  addNote: (note) => dispatch(tracksActions.addNote(note)),
   saveCurrentTrack: () => dispatch(tracksActions.saveCurrentTrack()),
 });
 

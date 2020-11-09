@@ -16,7 +16,7 @@ const Tracks = ({componentId, tracks, currentTrack}) => {
         <Text>{currentTrack ? 'Продолжить запись' : 'Записать новый'}</Text>
       </LargeButton>
       {tracks.map((track, i) => (
-        <TrackCard track={track} key={i} />
+        <TrackCard track={track} key={i} componentId={componentId} />
       ))}
     </Page>
   );

@@ -3,21 +3,21 @@ import {Polyline, Marker} from 'react-native-maps';
 
 import {getRegionByWaypoints} from '@utils/map';
 
-import {PAGE_NAMES} from '@constants/navigation';
+import {navigateToMap} from '@utils/navigation';
 
 import {Card, Map, Title, Meta} from './styles';
 
 import {Text} from '@components/Text';
 
-const TrackCard = ({track, navigation}) => {
+const TrackCard = ({track, componentId}) => {
   const {waypoints, notes} = track;
-
-  // const dateLabel = new Date(date).toLocaleString();
 
   const region = getRegionByWaypoints(waypoints);
 
+  const openMap = () => navigateToMap(componentId, {track});
+
   return (
-    <Card onPress={() => navigation.navigate(PAGE_NAMES.MAP, track)}>
+    <Card onPress={openMap}>
       <Map
         initialRegion={region}
         showsUserLocation

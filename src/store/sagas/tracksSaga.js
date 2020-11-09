@@ -47,8 +47,6 @@ function* addNote({payload}) {
   try {
     const db = yield select(getRealm);
 
-    console.log('SAVE: ', payload);
-
     db.write(() => {
       const user = db.objects('User')[0];
       user.currentTrack.notes.push(db.create('Note', payload));
