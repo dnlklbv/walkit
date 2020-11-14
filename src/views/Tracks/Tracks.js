@@ -15,8 +15,12 @@ const Tracks = ({componentId, tracks, currentTrack}) => {
       <LargeButton onPress={navToMap}>
         <Text>{currentTrack ? 'Продолжить запись' : 'Записать новый'}</Text>
       </LargeButton>
-      {tracks.map((track, i) => (
-        <TrackCard track={track} key={i} componentId={componentId} />
+      {tracks.map((t, i) => (
+        <TrackCard
+          track={tracks[tracks.length - (i + 1)]}
+          key={i}
+          componentId={componentId}
+        />
       ))}
     </Page>
   );

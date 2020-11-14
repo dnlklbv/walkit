@@ -8,13 +8,15 @@ import {
 
 const getRealm = ({core: {realm}}) => realm;
 
-function* addCurrentTrack() {
+function* addCurrentTrack({payload}) {
   try {
     const db = yield select(getRealm);
     db.write(() => {
       const user = db.objects('User')[0];
       user.currentTrack = db.create('Track', {
+        ...payload,
         waypoints: [],
+        notes: [],
       });
     });
   } catch (e) {
@@ -60,12 +62,15 @@ export function* watchAddNote() {
   yield takeLatest(ADD_NOTE, addNote);
 }
 
-function* saveCurrentTrack() {
+function* saveCurrentTrack({payload}) {
   try {
     const db = yield select(getRealm);
 
     db.write(() => {
       const user = db.objects('User')[0];
+      for (const key in payload) {
+        user.currentTrack[key] = payload[key];
+      }
       user.tracks.push(user.currentTrack);
       user.currentTrack = null;
     });

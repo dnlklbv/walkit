@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Polyline, Marker} from 'react-native-maps';
 
-import {getRegionByWaypoints} from '@utils/map';
+import {getRegionByWaypoints, humanizeDistance} from '@utils/map';
+import {humanizeDate} from '@utils/date';
 
 import {navigateToMap} from '@utils/navigation';
 
@@ -10,8 +11,10 @@ import {Card, Map, Title, Meta} from './styles';
 import {Text} from '@components/Text';
 
 const TrackCard = ({track, componentId}) => {
-  const {waypoints, notes} = track;
+  const {waypoints, notes, date, distance, title} = track;
 
+  const dateString = useMemo(() => humanizeDate(date), [date]);
+  const distanceString = useMemo(() => humanizeDistance(distance), [distance]);
   const region = getRegionByWaypoints(waypoints);
 
   const openMap = () => navigateToMap(componentId, {track});
@@ -33,9 +36,9 @@ const TrackCard = ({track, componentId}) => {
         ))}
       </Map>
       <Meta>
-        {/* <Text>{dateLabel}</Text>
-        <Title fontWeight={600}>{length}</Title>
-        <Text fontWeight={600}>{location}</Text> */}
+        <Text>{dateString}</Text>
+        <Title fontWeight={600}>{distanceString}</Title>
+        <Text fontWeight={600}>{title}</Text>
       </Meta>
     </Card>
   );

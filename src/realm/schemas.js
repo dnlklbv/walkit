@@ -19,6 +19,9 @@ export const NoteSchema = {
 export const TrackSchema = {
   name: 'Track',
   properties: {
+    title: 'string',
+    date: 'int',
+    distance: {type: 'int', default: 0},
     waypoints: 'Coordinates[]',
     notes: 'Note[]',
   },
@@ -28,7 +31,7 @@ export const UserSchema = {
   name: 'User',
   properties: {
     tracks: {type: 'Track[]', default: []},
-    currentTrack: {type: 'Track?', default: []},
+    currentTrack: {type: 'Track', default: {}, optional: true},
   },
 };
 

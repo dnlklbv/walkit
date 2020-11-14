@@ -24,21 +24,28 @@ function* initData() {
 
       if (!user) {
         realm.write(() => {
-          const currentTrack = realm.create('Track', {waypoints: []});
           realm.create('User', {
             tracks: [],
-            currentTrack,
+            currentTrack: null,
           });
         });
       } else {
-        tracks = user.tracks.map(({waypoints, notes}) => ({
-          waypoints: [...waypoints],
-          notes: [...notes],
-        }));
+        tracks = user.tracks.map(
+          ({waypoints, notes, date, title, distance}) => ({
+            title,
+            distance,
+            date,
+            waypoints: [...waypoints],
+            notes: [...notes],
+          }),
+        );
 
         currentTrack = !user.currentTrack
           ? null
           : {
+              title: user.currentTrack.title,
+              distance: user.currentTrack.distance,
+              date: user.currentTrack.date,
               waypoints: [...user.currentTrack.waypoints],
               notes: [...user.currentTrack.notes],
             };

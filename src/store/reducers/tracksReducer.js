@@ -25,7 +25,7 @@ const tracksReducer = (state = defaultState, {type, payload}) => {
     case SET_WATCH_ID:
       return {...state, watchId: payload};
     case CREATE_CURRENT_TRACK:
-      return {...state, currentTrack: newTrack};
+      return {...state, currentTrack: {...payload, ...newTrack}};
     case ADD_WAYPOINT:
       return {
         ...state,
@@ -45,7 +45,7 @@ const tracksReducer = (state = defaultState, {type, payload}) => {
     case SAVE_CURRENT_TRACK:
       return {
         ...state,
-        tracks: [...state.tracks, currentTrack],
+        tracks: [...state.tracks, {...payload, ...currentTrack}],
         currentTrack: null,
       };
     case SET_TRACKS:

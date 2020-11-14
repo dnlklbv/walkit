@@ -5,7 +5,7 @@ import BackgroundGeolocation from 'react-native-background-geolocation';
 
 import NoteMarker from '@components/NoteMarker';
 import {goBack, showNoteModal} from '@utils/navigation';
-import {getRegionByWaypoints} from '@utils/map';
+import {getRegionByWaypoints, getTrackDistance} from '@utils/map';
 import {GEOLOCATION_CONFIG} from '@constants/geolocation';
 import * as tracksActions from '@store/actions/tracksActions';
 
@@ -65,11 +65,20 @@ const MapView = ({
     });
   }, []);
 
-  const startTracking = () => createCurrentTrack();
+  const startTracking = () =>
+    createCurrentTrack({
+      date: new Date().getTime(),
+      title: 'Трек',
+    });
 
   const stopTracking = () => {
     BackgroundGeolocation.removeListeners();
-    saveCurrentTrack();
+
+    saveCurrentTrack({
+      distance: getTrackDistance(waypoints),
+    });
+
+    back();
   };
 
   const newNote = () => {
@@ -82,6 +91,7 @@ const MapView = ({
   return (
     <>
       <Map
+        mapPadding={{top: 30, right: 10, bottom: 50, left: 10}}
         showsUserLocation
         initialRegion={region}
         followsUserLocation={!trackExists && followUser}
@@ -95,7 +105,8 @@ const MapView = ({
             strokeWidth={5}
           />
         )}
-        {notes && notes.map((note, idx) => <NoteMarker key={idx} note={note} />)}
+        {notes &&
+          notes.map((note, idx) => <NoteMarker key={idx} note={note} />)}
       </Map>
       <Header>
         <ViewTitle>Walkit</ViewTitle>
@@ -126,9 +137,10 @@ const mapStateToProps = ({tracks: {currentTrack}}) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  createCurrentTrack: () => dispatch(tracksActions.createCurrentTrack()),
   addWaypoint: (wp) => dispatch(tracksActions.addWaypoint(wp)),
-  saveCurrentTrack: () => dispatch(tracksActions.saveCurrentTrack()),
+  saveCurrentTrack: (data) => dispatch(tracksActions.saveCurrentTrack(data)),
+  createCurrentTrack: (data) =>
+    dispatch(tracksActions.createCurrentTrack(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapView);

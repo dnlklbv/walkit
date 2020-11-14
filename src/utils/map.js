@@ -1,3 +1,5 @@
+import {getDistance} from 'geolib';
+
 export const getRegionByWaypoints = (waypoints) => {
   if (!waypoints.length) {
     return null;
@@ -19,3 +21,30 @@ export const getRegionByWaypoints = (waypoints) => {
     longitudeDelta,
   };
 };
+
+export const getTrackDistance = (waypoints = []) => {
+  console.log('CC: ', waypoints[0], waypoints[1]);
+  console.log('D: ', getDistance(waypoints[0], waypoints[1]));
+  return waypoints.reduce(
+    (distance, wp, idx) =>
+      waypoints[idx + 1]
+        ? distance +
+          getDistance(
+            {
+              latitude: waypoints[idx].latitude,
+              longitude: waypoints[idx].longitude,
+            },
+            {
+              latitude: waypoints[idx + 1].latitude,
+              longitude: waypoints[idx + 1].longitude,
+            },
+          )
+        : distance,
+    0,
+  );
+};
+
+export const humanizeDistance = (distance = 0) =>
+  distance < 1000
+    ? `${distance} Метров`
+    : `${Math.round(distance / 10) / 100} км`;
